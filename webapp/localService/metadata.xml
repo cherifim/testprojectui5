@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZTEST_ODATA_SRV" xml:lang="fr" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="Personne" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="ID personne" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Nom" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Nom personne" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Prenom" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Prenom personne" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Sexe" Type="Edm.String" MaxLength="1" sap:label="Sexe personne" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="Competences" Relationship="ZTEST_ODATA_SRV.toCompetences" FromRole="FromRole_toCompetences" ToRole="ToRole_toCompetences"/>
+            </EntityType>
+            <EntityType Name="Competence" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Id"/>
+                </Key>
+                <Property Name="Id" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="ID personne" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="IdComp" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="ID Compétence" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Comp" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Compétence" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <EntityType Name="DummyForSmartField" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int16" Nullable="false" sap:label="Signed INT2 / int16" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="SelectedPurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:updatable="true" sap:label="Document achat" sap:sortable="false"/>
+            </EntityType>
+            <EntityType Name="PurchaseOrderSH" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="PurchaseOrder"/>
+                </Key>
+                <Property Name="PurchaseOrderCategory" Type="Edm.String" Nullable="false" MaxLength="1" sap:label="Catégorie doc." sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="DocumentDate" Type="Edm.DateTime" Nullable="false" Precision="7" sap:label="Date document" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+                <Property Name="PurchaseOrder" Type="Edm.String" Nullable="false" MaxLength="10" sap:label="Document achat" sap:creatable="false" sap:updatable="false" sap:sortable="false"/>
+            </EntityType>
+            <ComplexType Name="Pays">
+                <Property Name="Land1" Type="Edm.String" Nullable="false" MaxLength="3" sap:label="Pays" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Landx" Type="Edm.String" Nullable="false" MaxLength="15" sap:label="Désignation" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+            </ComplexType>
+            <Association Name="toCompetences" sap:content-version="1">
+                <End Type="ZTEST_ODATA_SRV.Personne" Multiplicity="1" Role="FromRole_toCompetences"/>
+                <End Type="ZTEST_ODATA_SRV.Competence" Multiplicity="*" Role="ToRole_toCompetences"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_toCompetences">
+                        <PropertyRef Name="Id"/>
+                    </Principal>
+                    <Dependent Role="ToRole_toCompetences">
+                        <PropertyRef Name="Id"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZTEST_ODATA_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="Personnes" EntityType="ZTEST_ODATA_SRV.Personne" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="Competences" EntityType="ZTEST_ODATA_SRV.Competence" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="DummyForSmartFieldSet" EntityType="ZTEST_ODATA_SRV.DummyForSmartField" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/>
+                <EntitySet Name="PurchaseOrderSHSet" EntityType="ZTEST_ODATA_SRV.PurchaseOrderSH" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="toCompetencesSet" Association="ZTEST_ODATA_SRV.toCompetences" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="Personnes" Role="FromRole_toCompetences"/>
+                    <End EntitySet="Competences" Role="ToRole_toCompetences"/>
+                </AssociationSet>
+                <FunctionImport Name="getPays" ReturnType="Collection(ZTEST_ODATA_SRV.Pays)" m:HttpMethod="GET"/>
+            </EntityContainer>
+            <atom:link rel="self" href="https://ecc.gateway.stms:8989/sap/opu/odata/sap/ZTEST_ODATA_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="https://ecc.gateway.stms:8989/sap/opu/odata/sap/ZTEST_ODATA_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
